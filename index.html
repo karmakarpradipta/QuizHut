@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuizHut</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo_section">
+        <h2 class="logo_text">QuizHut</h2>
+      </div>
+      <button id="theme_toggle" class="theme_toggle">
+        <svg
+          width="16px"
+          height="16px"
+          viewBox="0 0 15 15"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1.66077 11.3619C2.09296 11.4524 2.54093 11.5 3.00002 11.5C6.58987 11.5 9.50002 8.58987 9.50002 5.00002C9.50002 3.25482 8.81224 1.67027 7.69295 0.502625C11.4697 0.604839 14.5 3.69855 14.5 7.50002C14.5 11.366 11.366 14.5 7.49999 14.5C5.06138 14.5 2.91401 13.253 1.66077 11.3619Z"
+            stroke="#000000"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+    </header>
+    <main>
+      <div id="loading_page" class="loading_page">
+        <span class="loader">Loading</span>
+      </div>
+      <div id="start_page" class="section start_page active">
+        <form id="quiz_form">
+          <span>
+            <h2 class="quiz_form_title">Configure Your Quiz</h2>
+            <label for="amount">Number of Questions</label>
+            <input
+              type="number"
+              name="amount"
+              id="question_amount"
+              class="form_control"
+              min="1"
+              max="50"
+              value="10"
+            />
+          </span>
+          <span>
+            <label for="category">Question Category</label>
+            <select name="category" id="quiz_category" class="form_control">
+              <option value="9">General Knowledge</option>
+              <option value="10">Entertainment: Books</option>
+              <option value="11">Entertainment: Film</option>
+              <option value="12">Entertainment: Music</option>
+              <option value="13">Entertainment: Musicals &amp; Theatres</option>
+              <option value="14">Entertainment: Television</option>
+              <option value="15">Entertainment: Video Games</option>
+              <option value="16">Entertainment: Board Games</option>
+              <option value="17">Science &amp; Nature</option>
+              <option value="18">Science: Computers</option>
+              <option value="19">Science: Mathematics</option>
+              <option value="20">Mythology</option>
+              <option value="21">Sports</option>
+              <option value="22">Geography</option>
+              <option value="23">History</option>
+              <option value="24">Politics</option>
+              <option value="25">Art</option>
+              <option value="26">Celebrities</option>
+              <option value="27">Animals</option>
+              <option value="28">Vehicles</option>
+              <option value="29">Entertainment: Comics</option>
+              <option value="30">Science: Gadgets</option>
+              <option value="31">
+                Entertainment: Japanese Anime &amp; Manga
+              </option>
+              <option value="32">
+                Entertainment: Cartoon &amp; Animations
+              </option>
+            </select>
+          </span>
+          <span>
+            <label for="difficulty">Select Difficulty</label>
+            <select
+              name="difficulty"
+              id="question_difficulty"
+              class="form_control"
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </span>
+          <span>
+            <label for="type">Select Type</label>
+            <select name="type" id="question_type" class="form_control">
+              <option value="multiple">Multiple Choice</option>
+              <option value="boolean">True / False</option>
+            </select>
+          </span>
+          <button id="start_quiz_btn" class="btn">Start Quiz</button>
+        </form>
+      </div>
+      <div id="question_page" class="section">
+        <div class="question_count_loader">
+          <div class="question_count_info_container">
+            <span id="question_count_info" class="question_count_info"
+              >Question 1 of 5</span
+            >
+            <span
+              id="question_count_percentage"
+              class="question_count_percentage"
+              >20%</span
+            >
+          </div>
+          <progress
+            id="question_count_progress_bar"
+            value="5"
+            max="100"
+            class="question_count_progress_bar"
+          ></progress>
+        </div>
+        <div class="question_header">
+          <h3 id="question_text"></h3>
+        </div>
+        <div id="option_bucket" class="option_bucket"></div>
+        <div class="question_footer">
+          <button id="next_question_btn" class="btn next_question_btn" disabled>
+            Check Answer
+          </button>
+        </div>
+      </div>
+      <div id="result_page" class="section result_page">
+        <div class="result_info_container">
+          <div class="result_logo_container">
+            <img class="result_logo" src="./assets/trophy-icon.svg" alt="" />
+          </div>
+          <div class="result_message_container">
+            <span class="main_message">Great Job!</span>
+            <span class="sub_message">Almost flawless!</span>
+          </div>
+          <div class="result_score_container">
+            <div class="circuler_score_indicator">
+              <div class="innerCircle"></div>
+              <div class="score_info_container">
+                <span class="achived_score">1</span>
+                <span class="out_of_score">of 5</span>
+              </div>
+            </div>
+            <span class="result_score_percentage">20% Correct</span>
+          </div>
+
+          <button id="restart_btn" class="btn restart_btn">Try Again</button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
