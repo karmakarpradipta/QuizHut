@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuizHut</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="theme.css" />
 
     <script defer src="script.js"></script>
   </head>
@@ -13,21 +14,12 @@
       <div class="logo_section">
         <h2 class="logo_text">QuizHut</h2>
       </div>
-      <button id="theme_toggle" class="theme_toggle">
-        <svg
-          width="16px"
-          height="16px"
-          viewBox="0 0 15 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.66077 11.3619C2.09296 11.4524 2.54093 11.5 3.00002 11.5C6.58987 11.5 9.50002 8.58987 9.50002 5.00002C9.50002 3.25482 8.81224 1.67027 7.69295 0.502625C11.4697 0.604839 14.5 3.69855 14.5 7.50002C14.5 11.366 11.366 14.5 7.49999 14.5C5.06138 14.5 2.91401 13.253 1.66077 11.3619Z"
-            stroke="#000000"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
+      <span class="theme_select_wrapper">
+      <select name="theme_select" id="theme_toggle">
+        <option value="default">Theme-1</option>
+        <option value="theme1">Theme-2</option>
+        <option value="theme2">Theme-3</option>
+      </select>
     </header>
     <main>
       <div id="loading_page" class="loading_page">
@@ -37,19 +29,16 @@
         <form id="quiz_form">
           <span>
             <h2 class="quiz_form_title">Configure Your Quiz</h2>
-            <label for="amount">Number of Questions</label>
+            <span class="question_amount_wrapper">
+              <label for="question_amount">Number of Questions</label>
+              <span id="question_amount_value">0</span>
+            </span>
             <input
-              type="number"
-              name="amount"
-              id="question_amount"
-              class="form_control"
-              min="1"
-              max="50"
-              value="10"
+              type="range" name="amount" id="question_amount" class="question_amount_range" min="1" max="50" value="10"
             />
           </span>
           <span>
-            <label for="category">Question Category</label>
+            <label for="quiz_category">Question Category</label>
             <select name="category" id="quiz_category" class="form_control">
               <option value="9">General Knowledge</option>
               <option value="10">Entertainment: Books</option>
@@ -82,8 +71,35 @@
             </select>
           </span>
           <span>
-            <label for="difficulty">Select Difficulty</label>
-            <select
+            <label for="question_difficulty">Select Difficulty</label>
+            <div id="question_difficulty" class="difficulty_input_group">
+              <input
+                type="radio"
+                name="difficulty"
+                id="easy"
+                value="easy"
+                hidden
+                checked
+              />
+              <label for="easy">Easy</label>
+              <input
+                type="radio"
+                name="difficulty"
+                id="medium"
+                value="medium"
+                hidden
+              />
+              <label for="medium">Medium</label>
+              <input
+                type="radio"
+                name="difficulty"
+                id="hard"
+                value="hard"
+                hidden
+              />
+              <label for="hard">Hard</label>
+            </div>
+            <!-- <select
               name="difficulty"
               id="question_difficulty"
               class="form_control"
@@ -91,16 +107,16 @@
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
               <option value="hard">Hard</option>
-            </select>
+            </select> -->
           </span>
           <span>
-            <label for="type">Select Type</label>
+            <label for="question_type">Select Type</label>
             <select name="type" id="question_type" class="form_control">
               <option value="multiple">Multiple Choice</option>
               <option value="boolean">True / False</option>
             </select>
           </span>
-          <button id="start_quiz_btn" class="btn">Start Quiz</button>
+          <button id="start_quiz_btn" class="btn">Start The Quiz</button>
         </form>
       </div>
       <div id="question_page" class="section">
@@ -127,6 +143,9 @@
         </div>
         <div id="option_bucket" class="option_bucket"></div>
         <div class="question_footer">
+          <button id="pass_question_btn" class="btn pass_question_btn">
+            Pass
+          </button>
           <button id="next_question_btn" class="btn next_question_btn" disabled>
             Check Answer
           </button>

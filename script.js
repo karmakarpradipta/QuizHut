@@ -1,10 +1,14 @@
 const BASE_URL = "https://opentdb.com/api.php";
+const themeToggle = document.getElementById("theme_toggle");
 const configurationPage = document.getElementById("start_page");
+const question_amount_input = document.getElementById("question_amount");
+const question_amount_value = document.getElementById("question_amount_value");
 const questionPage = document.getElementById("question_page");
 const resultPage = document.getElementById("result_page");
 const optionBucket = document.getElementById("option_bucket");
 const questionText = document.getElementById("question_text");
 const nextQuestionButton = document.getElementById("next_question_btn");
+const passQuestionButton = document.getElementById("pass_question_btn");
 const restartButton = document.getElementById("restart_btn");
 const startQuizButton = document.getElementById("start_quiz_btn");
 const loadingPage = document.getElementById("loading_page");
@@ -15,7 +19,7 @@ const questionCountInfo = document.getElementById("question_count_info");
 const questionCountPercentage = document.getElementById(
   "question_count_percentage",
 );
-const themeToggle = document.getElementById("theme_toggle");
+
 let questionsList = [];
 let currentQuestionIndex = 0;
 let numberOfQuestions = 0;
@@ -85,7 +89,8 @@ const showQuestion = () => {
   const incorrectOptions = currentQuestion?.incorrect_answers || [];
   const correctOption = currentQuestion?.correct_answer;
   const options = [...incorrectOptions, correctOption];
-  const finalOptions = currentQuestion?.type === "multiple"?shuffleArray(options):options;
+  const finalOptions =
+    currentQuestion?.type === "multiple" ? shuffleArray(options) : options;
   const fragment = document.createDocumentFragment();
 
   //map the options array and create the option buttons
@@ -125,7 +130,7 @@ const getWrongSVG = () => `
 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="white"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/></svg>
 `;
 
-const checkAnswer = () => {
+const checkAnswer = (pass) => {
   const correctButton = optionBucket.querySelector(
     '.option_btn[data-correct="true"]',
   );
@@ -137,9 +142,9 @@ const checkAnswer = () => {
     selectedButton
       .querySelector(".option_no")
       .classList.add("correct_option_no");
-      selectedButton.classList.add("correct_option_btn")
+    selectedButton.classList.add("correct_option_btn");
     selectedButton.querySelector(".option_no").innerHTML = getCorrectSVG();
-    resultScore++;
+    if (pass) resultScore++;
   } else {
     correctButton
       .querySelector(".option_no")
@@ -161,6 +166,17 @@ const checkAnswer = () => {
     nextQuestionButton.innerText = "Next Question";
   }
   isOptionSelected = false;
+};
+
+const revilAnswer = () => {
+  if (!isOptionSelected) {
+    const correctButton = optionBucket.querySelector(
+      '.option_btn[data-correct="true"]',
+    );
+    correctButton.classList.add("option_selected");
+    checkAnswer(false);
+    nextQuestionButton.removeAttribute("disabled");
+  }
 };
 
 const selectOption = (event) => {
@@ -248,6 +264,17 @@ const restartQuiz = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  const themes = ["theme1", "theme2"];
+  themeToggle.addEventListener("change", (e) => {
+    document.documentElement.classList.remove(...themes);
+    if (e.target.value !== "default") {
+      document.documentElement.classList.add(`${e.target.value}`);
+    }
+  });
+  question_amount_value.innerText = question_amount_input.value;
+  question_amount_input.addEventListener("input", (e) => {
+    question_amount_value.innerText = e.target.value;
+  });
   document
     .getElementById("quiz_form")
     .addEventListener("submit", async (event) => {
@@ -272,40 +299,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isShowResult) {
       showResult();
     } else if (isOptionSelected) {
-      checkAnswer();
+      checkAnswer(true);
     } else {
       currentQuestionIndex++;
       showQuestion();
     }
   });
 
-  restartButton.addEventListener("click", () => restartQuiz());
-
-  themeToggle.addEventListener("click", () => {
-    document.documentElement.classList.toggle("dark");
-    themeToggle.innerHTML =  document.documentElement.classList.contains("dark")
-      ?`  <svg
-    fill="#fff"
-    width="20px"
-    height="20px"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-  </svg>`
-      :`        <svg
-          width="16px"
-          height="16px"
-          viewBox="0 0 15 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.66077 11.3619C2.09296 11.4524 2.54093 11.5 3.00002 11.5C6.58987 11.5 9.50002 8.58987 9.50002 5.00002C9.50002 3.25482 8.81224 1.67027 7.69295 0.502625C11.4697 0.604839 14.5 3.69855 14.5 7.50002C14.5 11.366 11.366 14.5 7.49999 14.5C5.06138 14.5 2.91401 13.253 1.66077 11.3619Z"
-            stroke="#000000"
-            strokeLinejoin="round"
-          />
-        </svg>`;
+  passQuestionButton.addEventListener("click", (e) => {
+    revilAnswer();
   });
+
+  restartButton.addEventListener("click", () => restartQuiz());
 });
